@@ -36,7 +36,6 @@ According to the [Roblox Terms of Use](https://en.help.roblox.com/hc/en-us/artic
 
 *   **Windows Only:** This app is designed specifically for Windows (10 or 11).
 *   **Running the App:** 
-    *   **EXE Version:** Simply run the provided `.exe` file.
     *   **Python Version:** Requires Python 3.10+ installed on your computer.
 
 ---
