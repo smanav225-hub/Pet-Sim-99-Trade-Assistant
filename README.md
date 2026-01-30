@@ -14,7 +14,8 @@ This app is an **External Trading Assistant**. Instead of manually searching for
 3.  **Segment:** The app splits the image into parts: the **Name** area and the **Rarity** area, which you can see inside live folder.
 4.  **Read:** Using OCR (Optical Character Recognition), it reads the text directly from the screenshot and matches it with a local database of Cosmic Values.(will be removing cosmic values database shortly and adding more value lists)
 
-![App Preview](Images/image.png)
+![App Preview](IMAGES/image.png)
+
 
 ---
 
