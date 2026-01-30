@@ -11,7 +11,7 @@ The process begins with **hotkey monitoring**. The app uses the `win32api` to li
 *   **DWM Buffer Clearing:** The app waits for exactly **0.12 seconds** to allow the Windows display buffer to clear.
 *   **The Result:** A perfectly clean image called `original_screen.png`.
 
-![Original Screenshot](Images/original_screen.png)
+![Original Screen](IMAGES/Process/original_screen.png)
 
 ---
 
@@ -21,7 +21,7 @@ Now the app looks at the screenshot and needs to find the pet. It scans the imag
 *   **The Debug View:** It draws green highlight lines to show where it thinks the pet is located.
 *   **The Result:** A visualization image called `debug_result.png`.
 
-![Detection Result](Images/debug_result.png)
+![Debug Result](IMAGES/Process/debug_result.png)
 
 ---
 
@@ -31,7 +31,7 @@ Once the borders are found, the script performs the first extraction.
 *   It is created immediately after `Image_detection.py` identifies the region but before the final cleaning happens.
 *   **The Result:** The raw pet card image called `capture0.png`.
 
-![Rough Crop](Images/capture0.png)
+![Capture 0](IMAGES/Process/capture0.png)
 
 ---
 
@@ -41,7 +41,7 @@ Even after finding the box, there might be "noise" around the edges. This script
 *   **Cleaning:** It trims the image to these coordinates, removing the purple border entirely.
 *   **The Result:** `capture1.png`—a perfect, clean rectangle containing only the pet's information.
 
-![Cleaned Card](Images/capture1.png)
+![Capture 1](IMAGES/Process/capture1.png)
 
 🚀 **Milestone Reached:** The system has successfully isolated the data area. Now the name and rarity extraction begins.
 
@@ -53,7 +53,7 @@ To read the name, we have to isolate it from the rest of the card:
 *   **Binary Enhancement:** It applies a high-contrast black and white filter to help the OCR "eye" read the letters perfectly.
 *   **The Result:** `capture2.png`.
 
-![Name Snip](Images/capture2.png)
+![Capture 2](IMAGES/Process/capture2.png)
 
 #### 🤖 The OCR Engine (EasyOCR)
 The app passes `capture2.png` to **EasyOCR**. This is a Deep Learning model that recognizes characters and turns the image pixels into actual text like *"Huge Cat"*.
@@ -66,7 +66,7 @@ Determining the variant (Golden, Rainbow, Shiny) is a complex 6-step process (St
 *   **Rainbow Entropy:** It counts unique RGB colors. If it finds more than 80 different shades in the text, it confirms the pet is **Rainbow**.
 *   **The Result:** The finalized rarity snip called `capture3.png`.
 
-![Rarity Snip](Images/capture3.png)
+![Capture 3](IMAGES/Process/capture3.png)
 
 ---
 
