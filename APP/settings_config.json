@@ -1,0 +1,21 @@
+{
+    "stealth_mode": true,
+    "roblox_only": true,
+    "calc_size": 0.95,
+    "bind_find": {
+        "name": "z",
+        "char": "z",
+        "vk": 90,
+        "type": "keyboard"
+    },
+    "bind_trade": {
+        "name": "x",
+        "char": "x",
+        "vk": 88,
+        "type": "keyboard"
+    },
+    "max_pages": 9999,
+    "concurrent_pages": 3,
+    "active_categories": [],
+    "batch_size": 4
+}
