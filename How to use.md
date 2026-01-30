@@ -5,13 +5,7 @@ Welcome! This guide will show you how to set up and use the app to find pet valu
 ---
 
 ## 🚀 How to Start the App
-
-### 1. Using the EXE File (Easiest)
-*   Simply **double-click** on the `.exe` file in your folder. 
-*   **Note:** It may take **10 to 30 seconds** for the app to fully load and appear on your screen. After the window appears, it will take another **10 to 20 seconds** to fully initialize the OCR engine. Be patient!
-
-### 2. Using Python
-If you are running the script manually:
+Firstly open [Requirements](Requirements.md) and read it on how to install python. and all the libraries and after you are done with all those steps. begin from here.
 1.  Open your project folder.
 2.  Open the folder named **APP**. 
 3.  Double-click on **App.py** to run the script.
