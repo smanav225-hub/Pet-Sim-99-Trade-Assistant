@@ -1,6 +1,6 @@
 {
     "stealth_mode": true,
-    "roblox_only": true,
+    "roblox_only": false,
     "calc_size": 0.95,
     "bind_find": {
         "name": "z",
@@ -18,4 +18,5 @@
     "concurrent_pages": 3,
     "active_categories": [],
     "batch_size": 4
+
 }
