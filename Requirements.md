@@ -17,11 +17,11 @@
 
 ### 🐍 Step 2: Install Python
 You need Python to run the scripts. Follow these exact steps:
-1.  Go to [python.org/downloads](https://www.python.org/downloads/).
-2.  Click the big yellow button that says **Download Python**.
-3.  Open the file you just downloaded to start the installer.
-4.  **CRITICAL:** Look at the bottom of the installer window and check the box that says **"Add Python to PATH"**. If you miss this, the app won't work!
-5.  Click **Install Now** and wait for it to finish.
+1.  Go to [python.org/downloads](https://www.python.org/downloads/). (watch any youtube video on how to isntall python).
+3.  Click the big yellow button that says **Download Python**.
+4.  Open the file you just downloaded to start the installer.
+5.  **CRITICAL:** Look at the bottom of the installer window and check the box that says **"Add Python to PATH"**. If you miss this, the app won't work!
+6.  Click **Install Now** and wait for it to finish.
 
 ---
 
@@ -36,22 +36,12 @@ Now you need to tell your computer to download the tools the app needs to work.
 pip install PySide6 easyocr keyboard mss opencv-python pandas pillow playwright pywin32 rapidfuzz && playwright install chromium
 ```
 
-5.  Press **Enter** on your keyboard. Wait for it to finish (it might take a minute or two).
+5.  Press **Enter** on your keyboard. Wait for it to finish (it will take 1-5 minutes).
 
 ---
 
-### 🏃 Step 4: Run the App
-
-#### Using the .EXE File
-1.  **Double-click** the `.exe` file.
-2.  If a window says **"Windows protected your PC"**, click **"More info"** and then click **"Run anyway."**
-3.  If it closes, just open it again. It will work after the first attempt.
-
 #### Using the Python Script
 1.  Open the folder you extracted in Step 1.
-2.  Open the **APP ps99** folder.
-3.  Inside the Command Prompt (cmd), type `cd` followed by a space, then drag the **APP ps99** folder into the window and press Enter.
-4.  Type this and press Enter:
-    ```bash
-    python App.py
+2.  Open the **APP** folder.
+3.  Double click on app.py script to run it.
     ```
