@@ -29,6 +29,8 @@ Once the app is open, you can see the value of all **Huges, Titanics, Gargantuan
 *   Click the **Dropdown menus** to filter by rarity (like Huge, Titanic, or Exclusive).
 *   Type the name of any pet/item to see its current market value.
 
+![Manual Search](IMAGES/Manual%20Search.png)
+
 ---
 
 ## 🤝 How to Use the Trade Calculator
@@ -42,6 +44,8 @@ This is the most powerful part of the app. It helps you see if a trade is "Win" 
 3.  **Add Gems:** Type the total amount of Gems being offered in the **Entry Box** next to the trade list.
 4.  **See the Result:** The app will calculate the total for both sides and show you who is winning the trade!
 
+![Trading](IMAGES/Trading.png)
+
 ---
 
 ## ⚙️ Understanding Settings
@@ -54,6 +58,8 @@ Click on **Settings** to customize how the app works. Here is what each setting 
 *   **Batch Size:** How many images the app looks at once. Keep this at 1 for most computers.
 *   **Calculator Size:** Makes the calculator window bigger or smaller on your screen.
 
+![Settings](IMAGES/Setting.png)
+
 ---
 
 ## 🧮 Using the Calculator
@@ -62,6 +68,8 @@ If you just need a quick math tool, click the **Calculator** button.
     *   Type **`k`** for Thousands (1k = 1,000)
     *   Type **`m`** for Millions (1m = 1,000,000)
     *   Type **`b`** for Billions (1b = 1,000,000,000)
+
+![Calculator](IMAGES/Calculator.png)
 
 ---
 
@@ -75,6 +83,8 @@ The game prices change all the time! You can update the app's brain (the databas
     *   **Simultaneous Windows:** This is like opening multiple tabs in Google Chrome at the same time. If you set this to `3`, the app will open 3 web pages at once to download data 3x faster!
 4.  **Start Scan:** Click **Start Scan**. The app will visit the website and save everything into its **Database**.
 5.  **Export:** It also saves a copy as an Excel file in the **Exports** folder so you can look at the full list of values whenever you want!
+
+![Update Values](IMAGES/Update%20Values.png)
 
 ---
 
