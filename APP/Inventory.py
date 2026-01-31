@@ -317,6 +317,14 @@ class InventoryWindow(QWidget):
             
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
+            
+            # Check if master table exists to prevent crash on first run
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='master'")
+            if not cursor.fetchone():
+                print("[INVENTORY] Master table not found. Please run a Value scan first.")
+                conn.close()
+                return
+
             self.items_data = []
             
             for saved_item in saved_list:
