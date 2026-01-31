@@ -17,7 +17,7 @@
 
 ### 🐍 Step 2: Install Python
 You need Python to run the scripts. Follow these exact steps:
-1.  Go to [python.org/downloads](https://www.python.org/downloads/). (watch any youtube video on how to isntall python).
+1.  Go to [python.org/downloads](https://www.python.org/downloads/). (watch any youtube video on how to install python)([▶️ Watch this video on how to install python.](https://www.youtube.com/watch?v=ddGTXBhaGWA))
 3.  Click the big yellow button that says **Download Python**.
 4.  Open the file you just downloaded to start the installer.
 5.  **CRITICAL:** Look at the bottom of the installer window and check the box that says **"Add Python to PATH"**. If you miss this, the app won't work!
