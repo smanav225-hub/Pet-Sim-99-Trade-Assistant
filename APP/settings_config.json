@@ -1,0 +1,28 @@
+{
+    "stealth_mode": true,
+    "roblox_only": false,
+    "calc_size": 0.95,
+    "bind_find": {
+        "name": "z",
+        "char": "z",
+        "vk": 90,
+        "type": "keyboard"
+    },
+    "bind_trade": {
+        "name": "x",
+        "char": "x",
+        "vk": 88,
+        "type": "keyboard"
+    },
+    "max_pages": 9999,
+    "concurrent_pages": 4,
+    "active_categories": [],
+    "batch_size": 4,
+    "bind_inventory": {
+        "name": "shift",
+        "char": null,
+        "vk": 16,
+        "type": "keyboard"
+    },
+    "inventory": []
+}
