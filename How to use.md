@@ -42,6 +42,23 @@ This is the most powerful part of the app. It helps you see if a trade is "Win" 
 
 ---
 
+## 🎒 How to Use the Inventory Tracker
+The Inventory Tracker helps you keep a permanent record of your collection and calculates your total net worth in Gems.
+
+1.  **Open it:** Click the **Backpack (🎒)** icon in the main app header.
+2.  **Add Pets:** There are two ways to add pets to your inventory:
+    *   **Hotkey:** Hover over a pet in-game and press the **`Shift` key**.
+    *   **Button:** Hover over a pet, press `Z` to see its value, then click the long **Add to Inventory** button in the app.
+3.  **Manage Quantities:**
+    *   Click **`+`** or **`-`** in the inventory list to change how many of that pet you own.
+    *   If a quantity reaches **0**, the pet is automatically removed from your list.
+4.  **Live Net Worth:** The app automatically sorts your pets by value (most expensive at the top) and updates your **Total Value** instantly.
+5.  **Persistence:** Your inventory is saved automatically to your settings!
+
+![Inventory Tracker](IMAGES/Inventory.png)
+
+---
+
 ## ⚙️ Understanding Settings
 Click on **Settings** to customize how the app works. Here is what each setting does:
 
