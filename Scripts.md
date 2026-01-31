@@ -104,7 +104,20 @@ This file provides a deep dive into every script within the Pet Simulator 99 Tra
     *   Uses `QGraphicsDropShadowEffect` for a modern, floating UI look.
     *   **Connections**: Receives data from `App.py` via the `X` hotkey.
 
-### 9. Values.py
+### 9. Inventory.py
+*   **Purpose**: A dedicated portfolio tracker that allows users to maintain a persistent list of their pets and calculate their total net worth.
+*   **Features**:
+    *   **Persistent Storage**: Automatically saves and loads your pet list from `settings_config.json`.
+    *   **Trade-Style Controls**: Includes `+` and `-` buttons to manage quantities effortlessly.
+    *   **Live Net Worth**: Displays "Total Value" and "Total Quantity" that update in real-time.
+    *   **Value-Based Sorting**: Automatically sorts your collection with the most expensive pets at the top.
+    *   **Dual-View Mode**: Features a compact 3-column view and an expanded 8-column "Details" view.
+*   **Working (Technical Terms)**: 
+    *   Uses a `QTableWidget` with custom `NameDelegate` for multi-line text wrapping and dynamic row heights.
+    *   Fetches latest prices from `cosmic_values.db` during startup to ensure valuations are always current.
+    *   **Connections**: Receives data from `App.py` via the **Shift** hotkey or the manual "Add to Inventory" button.
+
+### 10. Values.py
 *   **Purpose**: The graphical interface for the web scraper, allowing users to manage database updates.
 *   **Features**:
     *   **Selective Scanning**: Use checkboxes to update only specific categories (e.g., Titanics or Eggs).
