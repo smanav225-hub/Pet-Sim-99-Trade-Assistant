@@ -225,7 +225,7 @@ class TradeSideWindow(QWidget):
 
     def update_diff_label(self):
         if not self.other_side: return
-        diff = self.total_value - self.other_side.total_value
+        diff = self.other_side.total_value - self.total_value
         if diff > 0: self.diff_lbl.setText(f"| <span style='color:#4ade80;'>▲ {format_price(diff)}</span>")
         elif diff < 0: self.diff_lbl.setText(f"| <span style='color:#ef4444;'>▼ {format_price(abs(diff))}</span>")
         else: self.diff_lbl.setText("| <span style='color:#a0a0a0;'>0</span>")
