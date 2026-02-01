@@ -3,6 +3,7 @@ import os
 import re
 import sqlite3
 import pandas as pd
+import time
 from datetime import datetime
 from playwright.async_api import async_playwright
 
@@ -189,7 +190,7 @@ class DatabaseManager:
 
         for name, cat_df in categories.items():
             output_path = os.path.join(EXPORT_DIR, f"{name}.xlsx")
-            lock_file = os.path.join(EXPORT_DIR, f"~${name}.xlsx")
+            lock_file = os.path.join(EXPORT_DIR, f"~$ {name}.xlsx")
             
             if os.path.exists(lock_file):
                 continue
@@ -202,28 +203,62 @@ class DatabaseManager:
                     ws.column_dimensions[column[0].column_letter].width = max_len + 2
 
 async def scrape_page(context, url, p_num, semaphore, scrape_date):
+    """Integrated Fast Scraping Logic for Batch Pages"""
     async with semaphore:
         page = await context.new_page()
         try:
-            await page.goto(url, wait_until="commit", timeout=40000)
-            await asyncio.sleep(1.5)
-            text = await page.inner_text("body")
+            # Use 'commit' for speed and anti-bot headers
+            await page.goto(url, wait_until="commit", timeout=30000)
+            
+            # Smart polling for data
+            text = ""
+            for _ in range(40): # Max 4 seconds
+                raw = await page.evaluate("() => document.body ? document.body.innerText : ''")
+                if "Value" in raw or "Exist" in raw or "RAP" in raw:
+                    text = raw
+                    break
+                await asyncio.sleep(0.1)
+            
+            if not text:
+                text = await page.evaluate("() => document.body.innerText")
+                
             await page.close()
             return parse_raw_text(text, scrape_date)
         except Exception:
-            await page.close()
+            if not page.is_closed():
+                await page.close()
             return []
 
 async def perform_scrape(category_name, start_url, db_manager, max_p, concurrent_p, progress_callback=None):
     scrape_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     async with async_playwright() as p:
+        # Anti-bot and Fast Launch
         browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context()
-        page = await context.new_page()
-        await page.goto(start_url, wait_until="domcontentloaded")
-        first_page_text = await page.inner_text("body")
-        await page.close()
+        context = await browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+        )
+        await context.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         
+        page = await context.new_page()
+        
+        if progress_callback: progress_callback(f"Opening {category_name}...")
+        
+        # Navigation
+        await page.goto(start_url, wait_until="commit", timeout=40000)
+        
+        # Smart polling for first page
+        first_page_text = ""
+        for _ in range(50):
+            raw = await page.evaluate("() => document.body ? document.body.innerText : ''")
+            if "Value" in raw or "Exist" in raw or "Next" in raw:
+                first_page_text = raw
+                break
+            await asyncio.sleep(0.1)
+            
+        if not first_page_text:
+            first_page_text = await page.evaluate("() => document.body.innerText")
+        
+        # Detect last page
         page_numbers = re.findall(r'(\d+)\nNext', first_page_text) or re.findall(r'(\d+)\s+Next', first_page_text)
         last_page = min(int(page_numbers[-1]) if page_numbers else 1, max_p)
         
@@ -233,7 +268,7 @@ async def perform_scrape(category_name, start_url, db_manager, max_p, concurrent
         all_pets = parse_raw_text(first_page_text, scrape_date)
         
         if last_page > 1:
-            base_url = start_url.split('&page=')[0]
+            base_url = start_url.split('&page=')[0].split('?page=')[0]
             link_temp = base_url + "&page={}" if '?' in base_url else base_url + "?page={}"
             tasks = [scrape_page(context, link_temp.format(i), i, semaphore, scrape_date) for i in range(2, last_page + 1)]
             results = await asyncio.gather(*tasks)
@@ -264,14 +299,17 @@ async def start_scraping_process(choices, max_p, concurrent_p, progress_callback
 
 async def main():
     db_manager = DatabaseManager(DB_FILE)
-    print("\nPet Simulator 99 Unified Scrapper")
+    print("\nPet Simulator 99 Unified Scrapper (Stealth Optimized)")
+    print("-" * 50)
     for k, v in CATEGORIES.items():
         print(f"{k}: {v[0]}")
     choice = input("\nSelect category (1-8): ").strip()
     if choice in CATEGORIES:
         name, url = CATEGORIES[choice]
-        await perform_scrape(name, url, db_manager, 9999, 3)
+        await perform_scrape(name, url, db_manager, 9999, 5)
+        print("\nExporting files...")
         db_manager.export_to_excel()
+        print("Success!")
     else:
         print("Invalid choice.")
 
