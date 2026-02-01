@@ -33,6 +33,34 @@ CATEGORIES = {
     "8": ("All", "https://petsimulatorvalues.com/values.php?category=all")
 }
 
+# --- STEALTH EVASION SCRIPT ---
+# This JavaScript hides browser automation fingerprints from anti-bot systems.
+STEALTH_SCRIPT = """
+    // Hide webdriver property
+    Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+    
+    // Fake plugins array (headless browsers have none)
+    Object.defineProperty(navigator, 'plugins', {
+        get: () => [1, 2, 3, 4, 5] // Appears as if plugins exist
+    });
+    
+    // Fake languages
+    Object.defineProperty(navigator, 'languages', {
+        get: () => ['en-US', 'en']
+    });
+    
+    // Prevent chrome.runtime detection (used to detect extensions)
+    window.chrome = {runtime: {}};
+    
+    // Fix permissions query (headless often fails this)
+    const originalQuery = window.navigator.permissions.query;
+    window.navigator.permissions.query = (parameters) => (
+        parameters.name === 'notifications' ?
+            Promise.resolve({ state: Notification.permission }) :
+            originalQuery(parameters)
+    );
+"""
+
 def parse_raw_text(text, scrape_date):
     data = []
     lines = [line.strip() for line in text.split("\n") if line.strip()]
@@ -232,12 +260,34 @@ async def scrape_page(context, url, p_num, semaphore, scrape_date):
 async def perform_scrape(category_name, start_url, db_manager, max_p, concurrent_p, progress_callback=None):
     scrape_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     async with async_playwright() as p:
-        # Anti-bot and Fast Launch
-        browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+        # --- STEALTH HEADLESS CONFIG ---
+        # Args that make headless Chrome appear more like a real browser
+        # AND suppress Windows Firewall notifications
+        browser = await p.chromium.launch(
+            headless=True,
+            args=[
+                "--disable-blink-features=AutomationControlled",  # Removes "navigator.webdriver" traces
+                "--disable-infobars",
+                "--disable-background-timer-throttling",
+                "--disable-popup-blocking",
+                "--disable-backgrounding-occluded-windows",
+                "--no-first-run",
+                # --- CRITICAL: These prevent Windows Firewall popups ---
+                "--disable-features=WebRtcHideLocalIpsWithMdns",  # Stops mDNS from opening network ports
+                "--disable-webrtc",  # Fully disable WebRTC (not needed for scraping)
+                "--disable-dev-shm-usage",  # Avoids shared memory issues
+                "--disable-extensions",  # No extensions = no extra network calls
+                "--disable-component-update",  # Stops Chrome from auto-updating components
+                "--disable-sync",  # No Google Sync = no network prompts
+            ]
         )
-        await context.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        context = await browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            viewport={"width": 1920, "height": 1080},
+            locale="en-US",
+        )
+        # Inject comprehensive stealth script on every page
+        await context.add_init_script(STEALTH_SCRIPT)
         
         page = await context.new_page()
         
