@@ -779,7 +779,18 @@ class FloatingPetCard(QWidget):
             self.lbl_updated.setText(f"Updated: {data.get('last_updated', '?')}")
             self.lbl_variant.setText(data.get("detected_variant", data.get("Variant", "Normal")))
             self.lbl_value.setText(data.get("Value", "?"))
-            self.lbl_value_change.setText(data.get("value_change", "-"))
+            
+            change_text = data.get("value_change", "-")
+            self.lbl_value_change.setText(change_text)
+            
+            # Color coding for value change
+            if "▲" in change_text or "up" in change_text.lower():
+                self.lbl_value_change.setStyleSheet("color: #3dff84; font-weight: bold;")
+            elif "▼" in change_text or "down" in change_text.lower():
+                self.lbl_value_change.setStyleSheet("color: #ff5f5f; font-weight: bold;")
+            else:
+                self.lbl_value_change.setStyleSheet("color: #eaeaf0; font-weight: bold;")
+
             self.lbl_demand.setText(data.get("Demand", "?"))
         else:
             self.lbl_name.setText(data.get("detected_name", "Unknown"))
