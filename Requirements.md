@@ -33,7 +33,8 @@ Now you need to tell your computer to download the tools the app needs to work.
 4.  Copy the long command below and **right-click** inside the black Command Prompt window to paste it:
 
 ```bash
-pip install PySide6 easyocr keyboard mss opencv-python pandas pillow playwright pywin32 rapidfuzz && playwright install chromium
+pip install PySide6 easyocr keyboard mss opencv-python pandas pillow playwright pywin32 rapidfuzz && python -m playwright install chromium
+
 ```
 
 5.  Press **Enter** on your keyboard. Wait for it to finish (it will take 1-5 minutes).
