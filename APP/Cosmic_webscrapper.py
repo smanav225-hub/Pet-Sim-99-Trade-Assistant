@@ -130,6 +130,32 @@ def parse_raw_text(text, scrape_date):
                 data.append(final_pet)
             current_pet = {}
         j += 1
+    # --- FIX: Save last pet if parser reached end without EXIST ---
+    if current_pet and 'Pet Name' in current_pet:
+        p_name = current_pet.get('Pet Name', '')
+        variant = current_pet.get('Variant', 'Normal')
+        
+        v_pattern = re.compile(re.escape(variant), re.IGNORECASE)
+        # Fix logic: Use current_pet storage or recalculate
+        name_clean = v_pattern.sub('', p_name).strip() if variant.lower() != "normal" else p_name
+        
+        final_pet = {
+            'Pet Name': p_name,
+            'Variant': variant,
+            'Value': current_pet.get('Value', ''),
+            'Value Change': current_pet.get('Value Change', ''),
+            'Last Updated': current_pet.get('Last Updated', ''),
+            'Demand': current_pet.get('Demand', ''),
+            'Exist': current_pet.get('Exist', ''),
+            'RAP': current_pet.get('RAP', ''),
+            'Name': name_clean,
+            'GOLD': "gold" in variant.lower(),
+            'RAINBOW': "rainbow" in variant.lower(),
+            'SHINY': "shiny" in variant.lower(),
+            'Date_Scraped': scrape_date
+        }
+        data.append(final_pet)
+
     return data
 
 class DatabaseManager:
@@ -154,17 +180,18 @@ class DatabaseManager:
         inserts, updates, skipped = 0, 0, 0
 
         for pet in pet_list:
-            cursor.execute('SELECT "Value", "Value Change", "Demand", "Exist", "RAP" FROM master WHERE "Pet Name" = ? AND "Variant" = ?', 
+            cursor.execute('SELECT "Value", "Value Change", "Demand", "Exist", "RAP", "Last Updated" FROM master WHERE "Pet Name" = ? AND "Variant" = ?', 
                            (pet['Pet Name'], pet['Variant']))
             row = cursor.fetchone()
             
             if row:
-                db_val, db_change, db_demand, db_exist, db_rap = row
+                db_val, db_change, db_demand, db_exist, db_rap, db_updated = row
                 changed = (str(pet['Value']) != str(db_val) or 
                            str(pet['Value Change']) != str(db_change) or
                            str(pet['Demand']) != str(db_demand) or
                            str(pet['Exist']) != str(db_exist) or
-                           str(pet['RAP']) != str(db_rap))
+                           str(pet['RAP']) != str(db_rap) or
+                           str(pet['Last Updated']) != str(db_updated))
 
                 if changed:
                     cursor.execute('''UPDATE master SET "Value"=?,
@@ -223,12 +250,49 @@ class DatabaseManager:
             if os.path.exists(lock_file):
                 continue
 
+            from openpyxl.styles import Font, PatternFill, Alignment
+
             with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
                 cat_df.to_excel(writer, index=False, sheet_name=name)
                 ws = writer.sheets[name]
+                
+                # Header styling
+                header_font = Font(bold=True, color="FFFFFF")
+                header_fill = PatternFill(start_color="4B0082", end_color="4B0082", fill_type="solid")
+                
+                for cell in ws[1]:
+                    cell.font = header_font
+                    cell.fill = header_fill
+                    cell.alignment = Alignment(horizontal="center")
+
+                # Columns indices
+                cols = {cell.value: i+1 for i, cell in enumerate(ws[1])}
+                change_col = cols.get("Value Change")
+
+                for row in range(2, ws.max_row + 1):
+                    # Style 'Value Change' column
+                    if change_col:
+                        cell = ws.cell(row=row, column=change_col)
+                        val = str(cell.value)
+                        if "▲" in val:
+                            cell.font = Font(color="00B050", bold=True) # Green
+                        elif "▼" in val:
+                            cell.font = Font(color="FF0000", bold=True) # Red
+
+                    # Center all cells
+                    for col in range(1, ws.max_column + 1):
+                        ws.cell(row=row, column=col).alignment = Alignment(horizontal="center")
+
+                # Auto-fit columns
                 for column in ws.columns:
-                    max_len = max([len(str(cell.value)) for cell in column] + [0])
-                    ws.column_dimensions[column[0].column_letter].width = max_len + 2
+                    max_len = 0
+                    column_letter = column[0].column_letter
+                    for cell in column:
+                        try:
+                            if cell.value:
+                                max_len = max(max_len, len(str(cell.value)))
+                        except: pass
+                    ws.column_dimensions[column_letter].width = max_len + 4
 
 async def scrape_page(context, url, p_num, semaphore, scrape_date):
     """Integrated Fast Scraping Logic for Batch Pages"""
