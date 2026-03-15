@@ -7,6 +7,7 @@ A powerful, computer-vision-powered desktop tool designed to help Pet Simulator 
 ## 🚀 What is this App?
 
 This app is an **External Trading Assistant**. Instead of manually searching for prices on websites, you can simply hover over a pet in-game and press a key. The app "sees" what you are looking at and tells you exactly what it's worth.
+It will get the latest Values from **Cosmic Values**. You would just need to hover your mouse over any met and see its current value instantly.
 
 ### How it works:
 1.  **Capture:** When you press a hotkey (Z or X), the app takes a high-speed screenshot of your Roblox window.
